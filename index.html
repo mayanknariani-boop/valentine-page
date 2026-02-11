@@ -5,128 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Be My Valentine ❤️</title>
     <style>
-        :root {
-            --pink: #ff4d6d;
-            --soft-pink: #ff9a9e;
-        }
-
+        :root { --pink: #ff4d6d; }
         body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0; padding: 0; min-height: 100vh; font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
-            background-size: 400% 400%;
-            animation: gradient 12s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            background-size: 400% 400%; animation: gradient 12s ease infinite;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
             touch-action: manipulation;
         }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
-        }
+        @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
         .card {
-            backdrop-filter: blur(15px);
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2rem;
-            border-radius: 25px;
-            text-align: center;
-            width: 85%;
-            max-width: 450px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 10;
-            display: none; /* Hidden by default */
+            backdrop-filter: blur(15px); background: rgba(255, 255, 255, 0.85);
+            padding: 25px; border-radius: 25px; text-align: center;
+            width: 85%; max-width: 450px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            z-index: 10; display: none;
         }
-
-        .card.active {
-            display: block;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .card.active { display: block; animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         h1 { font-size: 1.6rem; color: #333; margin-bottom: 0.5rem; }
         .subtitle { color: #666; font-style: italic; margin-bottom: 1.5rem; display: block; font-size: 0.9rem; }
 
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            min-height: 50px;
+        /* First Page Gallery */
+        .intro-gallery {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
         }
-
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
+        .intro-photo {
+            aspect-ratio: 1; background: #fff; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid white;
         }
+        .intro-photo img { width: 100%; height: 100%; object-fit: cover; }
 
-        #yes { background: var(--pink); color: white; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); }
-        #no { background: #ddd; position: fixed; z-index: 1000; touch-action: none; }
+        .btn-container { display: flex; justify-content: center; gap: 15px; min-height: 60px; }
+        button { padding: 12px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        #yes { background: var(--pink); color: white; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); z-index: 11; }
+        
+        /* Constant Moving No Button */
+        #no { background: #ddd; position: fixed; z-index: 1000; touch-action: none; transition: all 0.6s linear; }
 
-        /* Options Grid */
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-top: 1rem;
-        }
-
-        .option-card {
-            background: white;
-            padding: 8px;
-            border-radius: 15px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.2s;
-        }
-
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 1rem; }
+        .option-card { background: white; padding: 8px; border-radius: 15px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .option-card:hover { border-color: var(--pink); }
-
-        .option-card img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-            background: #f0f0f0;
-        }
-
+        .option-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; background: #f0f0f0; }
         .option-card p { margin: 8px 0 0; font-size: 0.9rem; font-weight: bold; color: #444; }
 
-        .heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 100;
-            animation: floatUp 4s linear forwards;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
-        }
+        .heart { position: fixed; pointer-events: none; z-index: 100; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { 0% { transform: translateY(110vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1.5); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
 
     <div class="card active" id="scene1">
+        <div class="intro-gallery">
+            <div class="intro-photo"><img src="intro1.jpg" alt="Us 1"></div>
+            <div class="intro-photo"><img src="intro2.jpg" alt="Us 2"></div>
+            <div class="intro-photo"><img src="intro3.jpg" alt="Us 3"></div>
+        </div>
         <h1>Will you be my Valentine? 💖</h1>
         <span class="subtitle">Try pressing no gaesaki</span>
         <div class="btn-container">
@@ -139,16 +76,13 @@
         <h1>What do you want for breakfast? 🍳</h1>
         <div class="options-grid">
             <div class="option-card" onclick="nextScene('scene3')">
-                <img src="breakfast1.jpg" alt="Breakfast 1">
-                <p>Option 1: Fluffy Pancakes</p>
+                <img src="breakfast1.jpg" alt="Option 1"><p>Option 1: Text & Pic</p>
             </div>
             <div class="option-card" onclick="nextScene('scene3')">
-                <img src="breakfast2.jpg" alt="Breakfast 2">
-                <p>Option 2: Big Breakfast</p>
+                <img src="breakfast2.jpg" alt="Option 2"><p>Option 2: Text & Pic</p>
             </div>
             <div class="option-card" onclick="nextScene('scene3')">
-                <img src="breakfast3.jpg" alt="Breakfast 3">
-                <p>Option 3: Sweet Pastries</p>
+                <img src="breakfast3.jpg" alt="Option 3"><p>Option 3: Text & Pic</p>
             </div>
         </div>
     </div>
@@ -156,38 +90,32 @@
     <div class="card" id="scene3">
         <h1 id="afternoon-text">Afternoon time is me time ehehhehe</h1>
         <div id="afternoon-options" style="display:none;">
-            <h1>How would you like to spend the afternoon? ☀️</h1>
+            <h1>Just kidding! 😜<br>What should we do?</h1>
             <div class="options-grid">
                 <div class="option-card" onclick="nextScene('scene4')">
-                    <img src="afternoon1.jpg" alt="Afternoon 1">
-                    <p>Option 1: Relaxing Movie</p>
+                    <img src="afternoon1.jpg" alt="Option 1"><p>Option 1: Text & Pic</p>
                 </div>
                 <div class="option-card" onclick="nextScene('scene4')">
-                    <img src="afternoon2.jpg" alt="Afternoon 2">
-                    <p>Option 2: Long Walk</p>
+                    <img src="afternoon2.jpg" alt="Option 2"><p>Option 2: Text & Pic</p>
                 </div>
                 <div class="option-card" onclick="nextScene('scene4')">
-                    <img src="afternoon3.jpg" alt="Afternoon 3">
-                    <p>Option 3: Gaming Time</p>
+                    <img src="afternoon3.jpg" alt="Option 3"><p>Option 3: Text & Pic</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card" id="scene4">
-        <h1>Evening time: How would you like to spend? 🌙</h1>
+        <h1>How would you like to spend the evening? 🌙</h1>
         <div class="options-grid">
             <div class="option-card" onclick="nextScene('scene5')">
-                <img src="evening1.jpg" alt="Evening 1">
-                <p>Option 1: Candlelight Dinner</p>
+                <img src="evening1.jpg" alt="Option 1"><p>Option 1: Text & Pic</p>
             </div>
             <div class="option-card" onclick="nextScene('scene5')">
-                <img src="evening2.jpg" alt="Evening 2">
-                <p>Option 2: Stargazing</p>
+                <img src="evening2.jpg" alt="Option 2"><p>Option 2: Text & Pic</p>
             </div>
             <div class="option-card" onclick="nextScene('scene5')">
-                <img src="evening3.jpg" alt="Evening 3">
-                <p>Option 3: Cozy Movie Night</p>
+                <img src="evening3.jpg" alt="Option 3"><p>Option 3: Text & Pic</p>
             </div>
         </div>
     </div>
@@ -201,76 +129,53 @@
         const noBtn = document.getElementById('no');
         const music = document.getElementById('bgMusic');
         let musicStarted = false;
+        let noMovementInterval;
 
-        // --- MUSIC LOGIC ---
         async function startMusic() {
             if (!musicStarted && music) {
-                try {
-                    await music.play();
-                    musicStarted = true;
-                } catch (e) {
-                    console.log("Music waiting for interaction...");
-                }
+                try { await music.play(); musicStarted = true; } catch (e) {}
             }
         }
 
-        // --- NO BUTTON LOGIC ---
-        function moveButton() {
-            startMusic();
-            const padding = 80;
+        function moveNoButton() {
+            const padding = 100;
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding) + padding/2;
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding) + padding/2;
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
         }
 
-        noBtn.addEventListener('mouseenter', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            moveButton();
-        });
+        // Start constant movement immediately
+        noMovementInterval = setInterval(moveNoButton, 800);
 
-        // --- SCENE NAVIGATION ---
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); startMusic(); });
+        noBtn.addEventListener('mouseenter', () => { moveNoButton(); startMusic(); });
+
         function nextScene(sceneId) {
             startMusic();
-            
-            // Hide all cards
+            if (sceneId !== 'scene1') clearInterval(noMovementInterval); 
+            if (noBtn) noBtn.style.display = 'none';
+
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            
-            // Show the next card
             const next = document.getElementById(sceneId);
-            if(next) {
-                next.classList.add('active');
-            }
+            if(next) next.classList.add('active');
 
-            // Joke Logic for Scene 3
             if(sceneId === 'scene3') {
-                const textEl = document.getElementById('afternoon-text');
-                const optionsEl = document.getElementById('afternoon-options');
-                
                 setTimeout(() => {
-                    textEl.innerText = "Just kidding! ❤️";
-                    setTimeout(() => {
-                        textEl.style.display = 'none';
-                        optionsEl.style.display = 'block';
-                    }, 1500);
-                }, 10000); // 10 second delay as requested
+                    document.getElementById('afternoon-options').style.display = 'block';
+                    document.getElementById('afternoon-text').style.display = 'none';
+                }, 10000); 
             }
-
-            // Final celebration
-            if(sceneId === 'scene5') {
-                spawnHearts();
-            }
+            if(sceneId === 'scene5') spawnHearts();
         }
 
         function spawnHearts() {
             for(let i=0; i<40; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
-                    heart.innerHTML = ['❤️','💖','✨','💕'][Math.floor(Math.random()*4)];
+                    heart.innerHTML = '❤️';
                     heart.className = 'heart';
                     heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
                     heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
                     document.body.appendChild(heart);
                     setTimeout(() => heart.remove(), 4000);
