@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Be My Valentine ❤️</title>
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ff9a9e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+            background-size: 400% 400%;
+            animation: gradient 12s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Prevents scrollbars when button moves */
+            touch-action: manipulation; /* Prevents double-tap zoom */
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        .card {
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px 20px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #444;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            min-height: 60px;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            touch-action: none; /* Critical for mobile button evasion */
+        }
+
+        #yes {
+            background: var(--primary-pink);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #yes:active {
+            transform: scale(0.95);
+        }
+
+        #no {
+            background: #666;
+            color: white;
+            position: fixed; /* Fixed is better for screen-wide movement */
+            z-index: 999;
+            transition: 0.1s ease-out;
+        }
+
+        /* Gallery Layout Refinement */
+        .gallery {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .photo {
+            aspect-ratio: 1;
+            background: #eee;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #999;
+            border: 2px solid white;
+            overflow: hidden;
+        }
+
+        /* Celebration Hearts */
+        .heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: float Upwards 4s linear forwards;
+        }
+
+        @keyframes floatUpwards {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .gallery { grid-template-columns: repeat(2, 1fr); }
+            .photo:nth-child(n+5) { display: none; } /* Show fewer photos on small screens */
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>Will you be my Valentine? 💖</h1>
+
+        <div class="btn-group">
+            <button id="yes" onclick="celebrate()">YES</button>
+            <button id="no">NO</button>
+        </div>
+
+        <div class="gallery">
+            <div class="photo">Memory 1</div>
+            <div class="photo">Memory 2</div>
+            <div class="photo">Memory 3</div>
+            <div class="photo">Memory 4</div>
+            <div class="photo">Memory 5</div>
+            <div class="photo">Memory 6</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const noBtn = document.getElementById('no');
+    const yesBtn = document.getElementById('yes');
+
+    /**
+     * Moves the button to a random location within the viewport.
+     * Keeps the button from going off-screen.
+     */
+    function moveButton() {
+        // Calculate safe boundaries
+        const padding = 20;
+        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+
+        noBtn.style.left = `${randomX}px`;
+        noBtn.style.top = `${randomY}px`;
+    }
+
+    // Desktop: Mouse Enter
+    noBtn.addEventListener('mouseenter', moveButton);
+
+    // Mobile: Touch Start (triggers before a click can happen)
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevents the actual click/tap
+        moveButton();
+    });
+
+    // Fallback: If they somehow manage to click it
+    noBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        moveButton();
+    });
+
+    function celebrate() {
+        // Change UI
+        document.querySelector('h1').innerHTML = "Yay! See you on the 14th! 🥰";
+        noBtn.style.display = 'none';
+        yesBtn.style.transform = "scale(1.5)";
+        
+        // Burst of hearts
+        for(let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = ['❤️','💖','🌸','✨','💕'][Math.floor(Math.random()*5)];
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.body.appendChild(heart);
+                
+                // Cleanup
+                setTimeout(() => heart.remove(), 5000);
+            }, i * 100);
+        }
+    }
+</script>
+
+</body>
+</html>
