@@ -1,158 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Be My Valentine ❤️</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Be My Valentine ❤️</title>
+    <style>
+        :root { --pink: #ff4d6d; --soft: #ff9a9e; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(-45deg,#ff9a9e,#fad0c4,#fad0c4,#ffdde1);
+            background-size: 400% 400%; animation: gradient 12s ease infinite;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            touch-action: manipulation;
+        }
+        @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-<style>
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(-45deg,#ff9a9e,#fad0c4,#fad0c4,#ffdde1);
-  background-size: 400% 400%;
-  animation: gradient 12s ease infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow-x: hidden;
-}
+        .card {
+            backdrop-filter: blur(15px); background: rgba(255,255,255,0.8);
+            padding: 30px; border-radius: 25px; text-align: center;
+            width: 85%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            z-index: 10; display: none; /* Hidden by default */
+        }
+        .card.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes gradient {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
+        h1 { font-size: 1.8rem; margin-bottom: 10px; color: #333; }
+        .subtitle { color: #666; font-style: italic; margin-bottom: 20px; display: block; }
 
-.card {
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.7);
-  padding: 40px;
-  border-radius: 25px;
-  text-align: center;
-  max-width: 900px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+        .option-card {
+            background: white; padding: 10px; border-radius: 15px; cursor: pointer;
+            transition: 0.3s; border: 2px solid transparent;
+        }
+        .option-card:hover { border-color: var(--pink); transform: scale(1.02); }
+        .option-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; background: #eee; }
+        .option-card p { margin: 10px 0 0; font-weight: bold; color: #444; }
 
-h1 {
-  font-size: 2em;
-  margin-bottom: 25px;
-}
+        button { padding: 12px 30px; margin: 10px; font-size: 16px; border: none; border-radius: 30px; cursor: pointer; }
+        #yes { background: var(--pink); color: white; }
+        #no { background: #ddd; position: fixed; z-index: 1000; touch-action: none; }
 
-button {
-  padding: 12px 30px;
-  margin: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#yes {
-  background: #ff4d6d;
-  color: white;
-}
-
-#yes:hover {
-  transform: scale(1.1);
-}
-
-#no {
-  background: #ddd;
-  position: absolute;
-}
-
-.gallery {
-  margin-top: 35px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
-  gap: 18px;
-}
-
-.photo {
-  height: 130px;
-  border-radius: 20px;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #888;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-  transition: 0.3s;
-}
-
-.photo:hover {
-  transform: scale(1.08) rotate(-1deg);
-}
-
-.heart {
-  position: fixed;
-  font-size: 18px;
-  animation: float 6s linear infinite;
-  opacity: .6;
-}
-
-@keyframes float {
-  from {transform: translateY(100vh) scale(.5);}
-  to {transform: translateY(-10vh) scale(1.2);}
-}
-</style>
+        .heart { position: fixed; font-size: 20px; animation: float 4s linear forwards; z-index: 100; pointer-events: none; }
+        @keyframes float { from {transform: translateY(100vh) scale(0.5);} to {transform: translateY(-10vh) scale(1.2); opacity: 0;} }
+    </style>
 </head>
-
 <body>
 
-<!-- Background Music -->
-<iframe width="0" height="0"
- src="music.mp3"
- frameborder="0" allow="autoplay"></iframe>
+<audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
 
-<div class="card">
-  <h1>Will you be my Valentine? 💖</h1>
+<div class="card active" id="scene1">
+    <h1>Will you be my Valentine? 💖</h1>
+    <span class="subtitle">Try pressing no gaesaki</span>
+    <button id="yes" onclick="nextScene('scene2')">Yes ❤️</button>
+    <button id="no">No</button>
+</div>
 
-  <button id="yes" onclick="celebrate()">Yes ❤️</button>
-  <button id="no">No</button>
+<div class="card" id="scene2">
+    <h1>What do you want for breakfast? 🍳</h1>
+    <div class="options-grid">
+        <div class="option-card" onclick="nextScene('scene3')">
+            <img src="breakfast1.jpg" alt="Option 1">
+            <p>Pancakes & Coffee</p>
+        </div>
+        <div class="option-card" onclick="nextScene('scene3')">
+            <img src="breakfast2.jpg" alt="Option 2">
+            <p>Traditional Breakfast</p>
+        </div>
+        <div class="option-card" onclick="nextScene('scene3')">
+            <img src="breakfast3.jpg" alt="Option 3">
+            <p>Fruit & Pastries</p>
+        </div>
+    </div>
+</div>
 
-  <div class="gallery">
-    <div class="photo">Photo 1</div>
-    <div class="photo">Photo 2</div>
-    <div class="photo">Photo 3</div>
-    <div class="photo">Photo 4</div>
-    <div class="photo">Photo 5</div>
-    <div class="photo">Photo 6</div>
-    <div class="photo">Photo 7</div>
-    <div class="photo">Photo 8</div>
-    <div class="photo">Photo 9</div>
-    <div class="photo">Photo 10</div>
-  </div>
+<div class="card" id="scene3">
+    <h1 id="afternoon-text">Afternoon time is me time ehehhehe</h1>
+    <div id="afternoon-options" style="display:none;">
+        <h1>How would you like to spend the afternoon? ☀️</h1>
+        <div class="options-grid">
+            <div class="option-card" onclick="nextScene('scene4')">
+                <img src="afternoon1.jpg" alt="Option 1">
+                <p>Movie Marathon</p>
+            </div>
+            <div class="option-card" onclick="nextScene('scene4')">
+                <img src="afternoon2.jpg" alt="Option 2">
+                <p>A Walk in the Park</p>
+            </div>
+            <div class="option-card" onclick="nextScene('scene4')">
+                <img src="afternoon3.jpg" alt="Option 3">
+                <p>Gaming Session</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="scene4">
+    <h1>Evening time: How would you like to spend? 🌙</h1>
+    <div class="options-grid">
+        <div class="option-card" onclick="nextScene('scene5')">
+            <img src="evening1.jpg" alt="Option 1">
+            <p>Fancy Dinner</p>
+        </div>
+        <div class="option-card" onclick="nextScene('scene5')">
+            <img src="evening2.jpg" alt="Option 2">
+            <p>Stargazing</p>
+        </div>
+        <div class="option-card" onclick="nextScene('scene5')">
+            <img src="evening3.jpg" alt="Option 3">
+            <p>Cozy Home Date</p>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="scene5">
+    <h1>Hope you get excited for 14th feb! ✨</h1>
+    <p>It will be a fun day hehehehe ❤️</p>
+    <div id="final-hearts"></div>
 </div>
 
 <script>
-const noBtn = document.getElementById('no');
+    const noBtn = document.getElementById('no');
+    const music = document.getElementById('bgMusic');
+    let musicStarted = false;
 
-function moveButton(){
-  const x=Math.random()*(window.innerWidth-100);
-  const y=Math.random()*(window.innerHeight-50);
-  noBtn.style.left=x+'px';
-  noBtn.style.top=y+'px';
-}
+    // --- LOGIC FOR NO BUTTON ---
+    function moveButton() {
+        if(!musicStarted) { music.play(); musicStarted = true; }
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+    }
+    noBtn.addEventListener('mouseenter', moveButton);
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
-noBtn.addEventListener('mouseenter',moveButton);
-noBtn.addEventListener('click',moveButton);
+    // --- SCENE NAVIGATION ---
+    function nextScene(sceneId) {
+        if(!musicStarted) { music.play(); musicStarted = true; }
+        
+        // Hide all cards
+        document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+        
+        // Show the next card
+        const nextCard = document.getElementById(sceneId);
+        nextCard.classList.add('active');
 
-function celebrate(){
-  alert("Yay!! ❤️ Can't wait for our Valentine date!");
-  for(let i=0;i<25;i++){
-    const heart=document.createElement('div');
-    heart.innerHTML='❤️';
-    heart.className='heart';
-    heart.style.left=Math.random()*45+'vw';
-    heart.style.animationDuration=(Math.random()*3+3)+'s';
-    document.body.appendChild(heart);
-  }
-}
+        // Special logic for Scene 3 (The joke)
+        if(sceneId === 'scene3') {
+            setTimeout(() => {
+                document.getElementById('afternoon-text').innerText = "Just kidding! ❤️";
+                setTimeout(() => {
+                    document.getElementById('afternoon-text').style.display = 'none';
+                    document.getElementById('afternoon-options').style.display = 'block';
+                }, 1500);
+            }, 3000); // 3 seconds of "me time" before the reveal
+        }
+
+        // Celebrate on final scene
+        if(sceneId === 'scene5') {
+            spawnHearts();
+        }
+    }
+
+    function spawnHearts() {
+        for(let i=0; i<30; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, i * 150);
+        }
+    }
 </script>
 
 </body>
