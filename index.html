@@ -1,219 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Be My Valentine ❤️</title>
-    <style>
-        :root {
-            --primary-pink: #ff4d6d;
-            --soft-pink: #ff9a9e;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Be My Valentine ❤️</title>
 
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
-            background-size: 400% 400%;
-            animation: gradient 12s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; /* Prevents scrollbars when button moves */
-            touch-action: manipulation; /* Prevents double-tap zoom */
-        }
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(-45deg,#ff9a9e,#fad0c4,#fad0c4,#ffdde1);
+  background-size: 400% 400%;
+  animation: gradient 12s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
 
-        @keyframes gradient {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
-        }
+@keyframes gradient {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            z-index: 10;
-        }
+.card {
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.7);
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+  max-width: 900px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
 
-        .card {
-            backdrop-filter: blur(15px);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px 20px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
+h1 {
+  font-size: 2em;
+  margin-bottom: 25px;
+}
 
-        h1 {
-            font-size: 1.8rem;
-            color: #444;
-            margin-bottom: 30px;
-            line-height: 1.2;
-        }
+button {
+  padding: 12px 30px;
+  margin: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            min-height: 60px;
-            position: relative;
-        }
+#yes {
+  background: #ff4d6d;
+  color: white;
+}
 
-        button {
-            padding: 15px 35px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            touch-action: none; /* Critical for mobile button evasion */
-        }
+#yes:hover {
+  transform: scale(1.1);
+}
 
-        #yes {
-            background: var(--primary-pink);
-            color: white;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
-        }
+#no {
+  background: #ddd;
+  position: absolute;
+}
 
-        #yes:active {
-            transform: scale(0.95);
-        }
+.gallery {
+  margin-top: 35px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
+  gap: 18px;
+}
 
-        #no {
-            background: #666;
-            color: white;
-            position: fixed; /* Fixed is better for screen-wide movement */
-            z-index: 999;
-            transition: 0.1s ease-out;
-        }
+.photo {
+  height: 130px;
+  border-radius: 20px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #888;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  transition: 0.3s;
+}
 
-        /* Gallery Layout Refinement */
-        .gallery {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
+.photo:hover {
+  transform: scale(1.08) rotate(-1deg);
+}
 
-        .photo {
-            aspect-ratio: 1;
-            background: #eee;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #999;
-            border: 2px solid white;
-            overflow: hidden;
-        }
+.heart {
+  position: fixed;
+  font-size: 18px;
+  animation: float 6s linear infinite;
+  opacity: .6;
+}
 
-        /* Celebration Hearts */
-        .heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 100;
-            animation: float Upwards 4s linear forwards;
-        }
-
-        @keyframes floatUpwards {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 480px) {
-            h1 { font-size: 1.5rem; }
-            .gallery { grid-template-columns: repeat(2, 1fr); }
-            .photo:nth-child(n+5) { display: none; } /* Show fewer photos on small screens */
-        }
-    </style>
+@keyframes float {
+  from {transform: translateY(100vh) scale(.5);}
+  to {transform: translateY(-10vh) scale(1.2);}
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
-    <div class="card">
-        <h1>Will you be my Valentine? 💖</h1>
+<!-- Background Music -->
+<iframe width="0" height="0"
+ src="https://www.youtube.com/embed/qdr0fZbuffY?autoplay=1&loop=1&playlist=qdr0fZbuffY&controls=0"
+ frameborder="0" allow="autoplay"></iframe>
 
-        <div class="btn-group">
-            <button id="yes" onclick="celebrate()">YES</button>
-            <button id="no">NO</button>
-        </div>
+<div class="card">
+  <h1>Will you be my Valentine? 💖</h1>
 
-        <div class="gallery">
-            <div class="photo">Memory 1</div>
-            <div class="photo">Memory 2</div>
-            <div class="photo">Memory 3</div>
-            <div class="photo">Memory 4</div>
-            <div class="photo">Memory 5</div>
-            <div class="photo">Memory 6</div>
-        </div>
-    </div>
+  <button id="yes" onclick="celebrate()">Yes ❤️</button>
+  <button id="no">No</button>
+
+  <div class="gallery">
+    <div class="photo">Photo 1</div>
+    <div class="photo">Photo 2</div>
+    <div class="photo">Photo 3</div>
+    <div class="photo">Photo 4</div>
+    <div class="photo">Photo 5</div>
+    <div class="photo">Photo 6</div>
+    <div class="photo">Photo 7</div>
+    <div class="photo">Photo 8</div>
+    <div class="photo">Photo 9</div>
+    <div class="photo">Photo 10</div>
+  </div>
 </div>
 
 <script>
-    const noBtn = document.getElementById('no');
-    const yesBtn = document.getElementById('yes');
+const noBtn = document.getElementById('no');
 
-    /**
-     * Moves the button to a random location within the viewport.
-     * Keeps the button from going off-screen.
-     */
-    function moveButton() {
-        // Calculate safe boundaries
-        const padding = 20;
-        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+function moveButton(){
+  const x=Math.random()*(window.innerWidth-100);
+  const y=Math.random()*(window.innerHeight-50);
+  noBtn.style.left=x+'px';
+  noBtn.style.top=y+'px';
+}
 
-        const randomX = Math.floor(Math.random() * maxX);
-        const randomY = Math.floor(Math.random() * maxY);
+noBtn.addEventListener('mouseenter',moveButton);
+noBtn.addEventListener('click',moveButton);
 
-        noBtn.style.left = `${randomX}px`;
-        noBtn.style.top = `${randomY}px`;
-    }
-
-    // Desktop: Mouse Enter
-    noBtn.addEventListener('mouseenter', moveButton);
-
-    // Mobile: Touch Start (triggers before a click can happen)
-    noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevents the actual click/tap
-        moveButton();
-    });
-
-    // Fallback: If they somehow manage to click it
-    noBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        moveButton();
-    });
-
-    function celebrate() {
-        // Change UI
-        document.querySelector('h1').innerHTML = "Yay! See you on the 14th! 🥰";
-        noBtn.style.display = 'none';
-        yesBtn.style.transform = "scale(1.5)";
-        
-        // Burst of hearts
-        for(let i = 0; i < 50; i++) {
-            setTimeout(() => {
-                const heart = document.createElement('div');
-                heart.innerHTML = ['❤️','💖','🌸','✨','💕'][Math.floor(Math.random()*5)];
-                heart.className = 'heart';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                document.body.appendChild(heart);
-                
-                // Cleanup
-                setTimeout(() => heart.remove(), 5000);
-            }, i * 100);
-        }
-    }
+function celebrate(){
+  alert("Yay!! ❤️ Can't wait for our Valentine date!");
+  for(let i=0;i<25;i++){
+    const heart=document.createElement('div');
+    heart.innerHTML='❤️';
+    heart.className='heart';
+    heart.style.left=Math.random()*45+'vw';
+    heart.style.animationDuration=(Math.random()*3+3)+'s';
+    document.body.appendChild(heart);
+  }
+}
 </script>
 
 </body>
